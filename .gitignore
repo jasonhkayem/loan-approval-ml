@@ -1,0 +1,10 @@
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+.env
+.env.*
+
+# Optional: ignore large or regenerated files
+models/
+outputs/
