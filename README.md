@@ -100,5 +100,3 @@ Ensemble and non-linear models (Random Forest and SVM) achieved the strongest ov
 - **Development Environment:** Jupyter Notebook  
 
 ---
-
-## Project Structure
