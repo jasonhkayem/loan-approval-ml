@@ -10,9 +10,7 @@ Binary classification model that predicts whether a loan application will be app
 ├── notebooks/
 │   └── eda.ipynb                     # Exploratory data analysis (not the source of truth)
 ├── src/
-│   ├── config.py                     # All paths, constants, and hyperparameters
-│   ├── preprocessing.py              # Imputation, encoding, scaling
-│   ├── features.py                   # Feature engineering
+│   ├── __init__.py
 │   └── evaluate.py                   # Metrics, plots, reporting helpers
 ├── train.py                          # End-to-end pipeline — run this
 └── requirements.txt

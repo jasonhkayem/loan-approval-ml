@@ -27,3 +27,11 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Secrets
+.env
+.env.*
+
+# Generated outputs
+models/
+outputs/
