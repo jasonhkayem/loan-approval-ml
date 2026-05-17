@@ -58,16 +58,25 @@ def _impute(X_train: pd.DataFrame, X_test: pd.DataFrame):
     Fill missing values. All fill statistics are derived from X_train.
 
     Strategy per column:
-    - Categorical (Credit_History, Self_Employed, Gender, Dependents, Married): mode
+    - Credit_History: add a Credit_History_Unknown flag (1 = was missing, 0 = observed),
+      then fill the original column with 0.5 — a neutral midpoint between 0 (bad) and
+      1 (good). Mode imputation (always 1.0) biased the model toward approval for all
+      50 missing rows on the single most predictive feature. The flag lets the model
+      learn that "unknown history" is a distinct third state.
+    - Self_Employed, Gender, Dependents, Married: mode — low missing rate
     - LoanAmount: mean — low missing rate (3.3%), mean is robust enough
-    - Credit_History: mode is always 1.0 (84% of rows), which biases toward
-      approval. Known limitation: 8.1% missing on the most predictive feature.
     - Loan_Amount_Term: KNN (k=5) — discrete valid terms (12–480 months);
       KNN picks a plausible neighbour value; mean could produce an impossible term.
     """
     X_train, X_test = X_train.copy(), X_test.copy()
 
-    for col in ["Credit_History", "Self_Employed", "Gender", "Dependents", "Married"]:
+    # Credit_History: preserve missingness as a distinct third state (0=bad, 0.5=unknown, 1=good)
+    X_train["Credit_History_Unknown"] = X_train["Credit_History"].isna().astype(int)
+    X_test["Credit_History_Unknown"]  = X_test["Credit_History"].isna().astype(int)
+    X_train["Credit_History"] = X_train["Credit_History"].fillna(0.5)
+    X_test["Credit_History"]  = X_test["Credit_History"].fillna(0.5)
+
+    for col in ["Self_Employed", "Gender", "Dependents", "Married"]:
         fill_val = X_train[col].mode()[0]
         X_train[col] = X_train[col].fillna(fill_val)
         X_test[col]  = X_test[col].fillna(fill_val)
